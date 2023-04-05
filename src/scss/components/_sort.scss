@@ -50,4 +50,10 @@
       }
     }
   }
+  @media (max-width: 480px) {
+    font-size: 14px;
+    &__popup {
+      font-size: 14px;
+    }
+  }
 }
