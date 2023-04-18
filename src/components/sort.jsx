@@ -1,29 +1,45 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSortType } from '../redux/slices/filterSlice';
+
+const sortList = [
+  { name: 'популярности(DESC)', property: 'popularity' },
+  { name: 'популярности(ASC)', property: '-popularity' },
+
+  { name: 'цене(DESC)', property: 'price' },
+  { name: 'цене(ASC)', property: '-price' },
+
+  { name: 'алфавиту(DESC)', property: 'title' },
+  { name: 'алфавиту(ASC)', property: '-title' },
+];
 
 function Sort() {
   const dispatch = useDispatch();
   const sortType = useSelector((state) => state.filter.sortType);
+  const sortRef = useRef();
+
   const [open, setOpen] = useState(false);
-  const sortList = [
-    { name: 'популярности(DESC)', property: 'popularity' },
-    { name: 'популярности(ASC)', property: '-popularity' },
-
-    { name: 'цене(DESC)', property: 'price' },
-    { name: 'цене(ASC)', property: '-price' },
-
-    { name: 'алфавиту(DESC)', property: 'title' },
-    { name: 'алфавиту(ASC)', property: '-title' },
-  ];
 
   const onClickListItem = (obj) => {
     dispatch(setSortType(obj));
     setOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.composedPath().includes(sortRef.current)) {
+        setOpen(false);
+        console.log('click');
+      }
+    };
+
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => document.body.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
