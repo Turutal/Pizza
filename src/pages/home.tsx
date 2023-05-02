@@ -9,12 +9,13 @@ import Skeleton from '../components/pizza-block/skeleton';
 import Pagination from '../components/pagination';
 import { setActiveCategory, setCurrentPage } from '../redux/slices/filterSlice';
 import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import React from 'react';
 
 function Home() {
   const dispatch = useDispatch();
-  const { items, status } = useSelector((state) => state.pizzas);
+  const { items, status } = useSelector((state: any) => state.pizzas);
   const { activeCategory, sortType, currentPage, searchValue } = useSelector(
-    (state) => state.filter
+    (state: any) => state.filter
   );
 
   useEffect(() => {
@@ -24,20 +25,25 @@ function Home() {
       const order = sortType.property.includes('-') ? 'asc' : 'desc';
       const search = searchValue ? `&search=${searchValue}` : '';
 
-      dispatch(fetchPizzas({ category, sortBy, order, search, currentPage }));
+      dispatch(
+        // @ts-ignore
+        fetchPizzas({ category, sortBy, order, search, currentPage })
+      );
       window.moveTo(0, 0);
     };
 
     getPizzas();
   }, [activeCategory, searchValue, currentPage, sortType.property]);
 
-  const pizzas = items.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />);
+  const pizzas = items.map((pizza: any) => (
+    <PizzaBlock key={pizza.id} {...pizza} />
+  ));
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number) => {
     dispatch(setActiveCategory(id));
   };
 
-  const onChangePage = (number) => {
+  const onChangePage = (number: number) => {
     dispatch(setCurrentPage(number));
   };
 

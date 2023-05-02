@@ -1,10 +1,15 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const PizzaDescr = () => {
   const { id } = useParams();
-  const [pizza, setPizza] = useState();
+  const [pizza, setPizza] = useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>();
 
   useEffect(() => {
     async function fetchPizza() {
@@ -22,7 +27,7 @@ const PizzaDescr = () => {
   }, []);
 
   if (!pizza) {
-    return 'Loading...';
+    return <p>Loading...</p>;
   }
 
   return (
